@@ -1,0 +1,19 @@
+import { serverSupabaseServiceRole } from '#supabase/server'
+
+export default eventHandler(async (event) => {
+  const supabase = serverSupabaseServiceRole(event)
+  const body = await readBody(event)
+
+  const { data, error } = await supabase.auth.admin.createUser({
+    email: body.email,
+    password: body.password,
+    user_metadata: {
+      tipe_user: body.tipe_user,
+      username: body.username
+    },
+    email_confirm: true
+  })
+  if (error) throw error
+
+  return data
+})

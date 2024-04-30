@@ -1,0 +1,13 @@
+export default defineNuxtRouteMiddleware((to, from) => {
+  const user = useSupabaseUser()
+
+  if (user.value.user_metadata.tipe_user == 'Admin') return
+  if (user.value.user_metadata.tipe_user == 'Apoteker') {
+    if (['index', 'obat', 'resep'].includes(to.name.split('-')[0])) return
+    else return navigateTo('/')
+  }
+  if (user.value.user_metadata.tipe_user == 'Kasir') {
+    if (['index', 'transaksi', 'laporan'].includes(to.name.split('-')[0])) return
+    else return navigateTo('/')
+  }
+})
